@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulado — Engenharia de Software</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--text:#172033;--muted:#667085;--primary:#2563eb;--primary2:#1d4ed8;--ok:#15803d;--okbg:#dcfce7;--bad:#b91c1c;--badbg:#fee2e2;--border:#e4e7ec}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text)}
+.container{max-width:900px;margin:0 auto;padding:28px 18px 50px}
+header{background:linear-gradient(135deg,#1d4ed8,#2563eb);color:#fff;border-radius:20px;padding:28px;margin-bottom:18px;box-shadow:0 12px 30px #1d4ed822}
+h1{margin:0 0 8px;font-size:28px}.subtitle{opacity:.9;line-height:1.5}
+.progress-wrap{margin-top:18px;background:#ffffff33;border-radius:999px;height:10px;overflow:hidden}.progress{height:100%;background:#fff;width:0;transition:.3s}
+.meta{display:flex;justify-content:space-between;margin-top:9px;font-size:13px;opacity:.9}
+.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:24px;box-shadow:0 6px 20px #1018280a}
+.badge{display:inline-block;background:#eff6ff;color:#1d4ed8;border-radius:999px;padding:6px 10px;font-size:12px;font-weight:700;margin-bottom:13px}
+.question{font-size:19px;line-height:1.55;font-weight:650;margin:0 0 18px}
+.options{display:grid;gap:10px}.option{display:flex;align-items:flex-start;gap:12px;width:100%;padding:14px;border:1px solid var(--border);background:#fff;border-radius:12px;text-align:left;cursor:pointer;font-size:15px;line-height:1.4;transition:.15s}
+.option:hover{border-color:#93c5fd;background:#f8fbff}.option.selected{border-color:var(--primary);background:#eff6ff}.letter{font-weight:800;color:var(--primary);min-width:22px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}.btn{border:0;border-radius:10px;padding:11px 17px;font-weight:750;cursor:pointer}.check{background:var(--primary);color:#fff}.check:hover{background:var(--primary2)}.next{background:#111827;color:#fff}.restart{background:#fff;border:1px solid var(--border)}
+.feedback{margin-top:16px;padding:14px;border-radius:12px;line-height:1.5;display:none}.feedback.ok{display:block;background:var(--okbg);color:var(--ok)}.feedback.bad{display:block;background:var(--badbg);color:var(--bad)}
+.option.correct{border-color:#22c55e;background:#f0fdf4}.option.wrong{border-color:#ef4444;background:#fef2f2}
+.result{text-align:center}.score{font-size:46px;font-weight:850;color:var(--primary);margin:10px 0}.result h2{margin-bottom:4px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:20px 0}.stat{border:1px solid var(--border);border-radius:12px;padding:15px}.stat strong{display:block;font-size:24px}.review{text-align:left;margin-top:20px}.review-item{padding:12px;border-bottom:1px solid var(--border)}.small{color:var(--muted);font-size:13px}
+.hidden{display:none!important}
+@media(max-width:600px){.stats{grid-template-columns:1fr}.container{padding:15px 10px}.card{padding:18px}h1{font-size:23px}}
+
+.statement{line-height:1.7;
+    display:block;
+    margin:10px 0;
+    padding-left:8px;
+}
+.statement strong{
+    color:#1d4ed8;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1>📚 Simulado — Engenharia de Software</h1>
+<div class="subtitle">20 questões baseadas nos materiais fornecidos. Verifique cada questão individualmente e veja sua avaliação ao final.</div>
+<div class="progress-wrap"><div class="progress" id="progress"></div></div>
+<div class="meta"><span id="counter">Questão 1 de 20</span><span id="scoreTop">Acertos: 0</span></div>
+</header>
+
+<section class="card" id="quiz"></section>
+<section class="card result hidden" id="result"></section>
+</div>
+
+
+<script>
+function formatQuestionText(text){
+ return text
+ .replace(/\s(I\.)(?!I|II)/g,'<br><span class="statement"><strong>$1</strong>')
+ .replace(/\s(II\.)(?!I)/g,'</span><span class="statement"><strong>$1</strong>')
+ .replace(/\s(III\.)/g,'</span><span class="statement"><strong>$1</strong>')
+ .replace(/(Qual alternativa está correta\?)/g,'</span><br><br><strong>$1</strong>');
+}
+
+const questions = [{"id": 1, "tema": "Fundamentos", "question": "Qual camada da Engenharia de Software determina as etapas de desenvolvimento do software?", "options": ["Qualidade", "Processo", "Métodos", "Ferramentas", "Gerenciamento de riscos"], "answer": 1, "explanation": "Nos materiais, a camada de processo determina as etapas de desenvolvimento do software."}, {"id": 2, "tema": "Requisitos", "question": "Qual alternativa descreve corretamente os requisitos funcionais?", "options": ["Restrições operacionais e características de qualidade", "Serviços ou funcionalidades que estarão disponíveis no software", "Regras de negócio que restringem requisitos funcionais", "Ferramentas CASE utilizadas no projeto", "Versões específicas do software em produção"], "answer": 1, "explanation": "Requisitos funcionais estão relacionados aos serviços fornecidos pelo sistema, isto é, às funcionalidades disponíveis."}, {"id": 3, "tema": "Requisitos", "question": "Os requisitos de domínio também são conhecidos como:", "options": ["Requisitos de usuário", "Requisitos de sistema", "Regras de negócio", "Requisitos de interface", "Requisitos de implementação"], "answer": 2, "explanation": "O Tema 2 apresenta os requisitos de domínio como também chamados de regras de negócio."}, {"id": 4, "tema": "Gerenciamento de Projetos", "question": "Uma equipe está definindo a duração de cada atividade do processo de desenvolvimento e suas dependências. Em qual grupo de processos e área de conhecimento do PMBOK ela se encontra?", "options": ["Planejamento e gerenciamento do cronograma", "Execução e gerenciamento da integração", "Execução e gerenciamento do cronograma", "Planejamento e gerenciamento do escopo", "Iniciação e gerenciamento dos riscos"], "answer": 0, "explanation": "O material indica grupo de processos de planejamento e área de conhecimento gerenciamento do cronograma."}, {"id": 5, "tema": "Modelos de Processo", "question": "O Modelo Espiral incorpora características do Ciclo de Vida Clássico e da Prototipação e acrescenta qual elemento?", "options": ["Análise dos riscos", "Análise de projetos", "Avaliação de usuários", "Refinamento de requisitos", "Refinamento de protótipos"], "answer": 0, "explanation": "Segundo a atividade do Tema 4, o modelo espiral enfatiza a análise de riscos."}, {"id": 6, "tema": "Modelos de Processo", "question": "Um projeto possui requisitos complexos e parcialmente identificados, e o cliente deseja receber versões que agreguem valor ao negócio. Qual modelo foi indicado no material?", "options": ["Incremental", "Evolucionário", "Espiral", "Cascata", "Iterativo"], "answer": 1, "explanation": "A atividade do Tema 4 indica o modelo evolucionário para requisitos parcialmente identificados e entrega de versões."}, {"id": 7, "tema": "Prototipação", "question": "Na sequência de prototipação apresentada no arquivo Questões.pdf, qual é a ordem correta?", "options": ["Avaliar → definir funcionalidade → estabelecer objetivos → desenvolver", "Estabelecer objetivos → definir funcionalidade → desenvolver → avaliar", "Desenvolver → estabelecer objetivos → definir funcionalidade → avaliar", "Definir funcionalidade → avaliar → estabelecer objetivos → desenvolver", "Definir funcionalidade → estabelecer objetivos → avaliar → desenvolver"], "answer": 1, "explanation": "O arquivo Questões.pdf apresenta como correta a sequência II, IV, III e I: estabelecer objetivos, definir funcionalidade, desenvolver e avaliar."}, {"id": 8, "tema": "Processos Ágeis", "question": "No Scrum, segundo a atividade apresentada no Tema 4, quem possui autoridade para cancelar uma Sprint?", "options": ["Time Scrum", "Scrum Master", "Product Owner", "Team Manager", "Gerente de projeto"], "answer": 2, "explanation": "A atividade do Tema 4 apresenta Product Owner como a alternativa correta."}, {"id": 9, "tema": "XP", "question": "Em um projeto XP, considerando desenvolvimento orientado a testes, qual afirmação está correta?", "options": ["Os testes unitários devem ser elaborados antes da codificação.", "A codificação deve ocorrer antes dos cartões CRC.", "Os cartões CRC devem ser feitos depois da codificação.", "Os testes só devem ocorrer depois da implantação.", "A sequência apresentada não possui relação com XP."], "answer": 0, "explanation": "O material relaciona a prática 'test first' à elaboração dos testes unitários antes da codificação."}, {"id": 10, "tema": "Scrum/AUP", "question": "Qual evento é apresentado como base do Scrum e corresponde a uma iteração que gera um incremento operacional?", "options": ["Release", "Sprint", "Baseline", "Codeline", "Milestone"], "answer": 1, "explanation": "O Tema 4 apresenta a Sprint como a iteração do Scrum ao final da qual é gerado um incremento de software operacional."}, {"id": 11, "tema": "Fases do Desenvolvimento", "question": "Qual é a sequência de etapas genéricas apresentada no Tema 3?", "options": ["Requisitos, análise, projeto, implementação, testes, implantação e manutenção", "Análise, requisitos, implementação, projeto, manutenção, testes e implantação", "Projeto, requisitos, análise, testes, implementação, manutenção e implantação", "Requisitos, implementação, análise, projeto, implantação, testes e manutenção", "Planejamento, projeto, codificação, implantação e auditoria"], "answer": 0, "explanation": "O Tema 3 apresenta: levantamento de requisitos, análise, projeto, implementação, testes, implantação e manutenção."}, {"id": 12, "tema": "Manutenção", "question": "Na fase de manutenção, podem ser incluídas novas funções requeridas pelo cliente e feitas adaptações decorrentes de modificações de hardware. Considere as afirmações abaixo: I. A manutenção pode incluir melhorias e novas funcionalidades solicitadas pelo usuário. II. A manutenção ocorre somente para corrigir erros, não podendo alterar funcionalidades existentes. III. A manutenção pode envolver adaptações do software devido a mudanças no ambiente de execução, como hardware ou sistema operacional. Qual alternativa está correta?", "options": ["Apenas I", "Apenas II", "Apenas I e III", "Apenas II e III", "I, II e III"], "answer": 2, "explanation": "A alternativa correta é C (Apenas I e III). A manutenção de software não se limita à correção de defeitos. Ela também inclui evolução do sistema, implementação de melhorias solicitadas pelo cliente e adaptações necessárias quando o ambiente tecnológico sofre alterações. A afirmação II está incorreta porque restringe a manutenção apenas à correção de erros."}, {"id": 13, "tema": "Testes", "question": "Qual tipo de teste avalia a parte modificada e áreas adjacentes que podem ter sido afetadas por alterações no código?", "options": ["Revisão de funcionalidade", "Gama", "Aceite operacional", "Regressão", "Disponibilização"], "answer": 3, "explanation": "O material identifica essa situação como teste de regressão."}, {"id": 14, "tema": "Testes", "question": "Qual teste tem como objetivo executar o software sobre diversas configurações de software e hardware?", "options": ["Teste unitário", "Teste de integração", "Teste de validação", "Teste de sistema", "Teste de disponibilização/configuração"], "answer": 4, "explanation": "O Tema 3 descreve o teste de disponibilização, também chamado teste de configuração, para verificar diferentes ambientes."}, {"id": 15, "tema": "Qualidade", "question": "Qual aspecto da qualidade de software se refere à facilidade de modificar o software para corrigir defeitos, adequar-se a novos requisitos ou a um novo ambiente?", "options": ["Usabilidade", "Funcionalidade", "Manutenibilidade", "Eficiência", "Confiabilidade"], "answer": 2, "explanation": "O material de Qualidade de Software define manutenibilidade dessa forma."}, {"id": 16, "tema": "Qualidade", "question": "Qual é uma atribuição da equipe de SQA (Software Quality Assurance)?", "options": ["Eliminar a necessidade de testes", "Auxiliar a equipe a obter um produto final de alta qualidade", "Substituir completamente a equipe de desenvolvimento", "Definir somente a arquitetura física", "Controlar exclusivamente os custos do projeto"], "answer": 1, "explanation": "O Tema 5 apresenta a equipe de SQA como responsável por auxiliar a equipe de software na obtenção de um produto final de alta qualidade."}, {"id": 17, "tema": "Gerenciamento de Configurações", "question": "No repositório SVN, qual comando é usado para criar uma cópia de trabalho do repositório para poder editar?", "options": ["CHECK-OUT", "DIFF", "PERFORM", "COMMIT", "UPDATE"], "answer": 0, "explanation": "A questão do Tema 6 apresenta CHECK-OUT como a alternativa correta."}, {"id": 18, "tema": "Gerenciamento de Configurações", "question": "Qual conjunto corresponde às principais tarefas do processo de Gerenciamento de Configurações de Software (GCS) apresentado no material?", "options": ["Identificação, controle de versão, controle de alteração, auditoria de configuração e relatos", "Requisitos, análise, projeto, codificação e implantação", "Planejamento, execução, monitoramento, controle e encerramento", "Sprint, Daily, Review, Retrospective e Release", "Modelagem, implementação, testes, implantação e ambiente"], "answer": 0, "explanation": "O Tema 6 apresenta cinco tarefas: identificação, controle de versão, controle de alteração, auditoria de configuração e relatos."}, {"id": 19, "tema": "Gerenciamento de Versões", "question": "Sobre gerenciamento de versões, quais afirmações estão corretas? I. Acompanha diferentes versões e evita interferência indevida entre alterações. II. Desenvolvedores não podem trabalhar simultaneamente no mesmo componente. III. Pode usar diferenças (deltas) para reduzir armazenamento.", "options": ["Apenas II", "Apenas I e II", "Apenas I e III", "Apenas II e III", "I, II e III"], "answer": 2, "explanation": "O arquivo Questões.pdf apresenta como correta a alternativa C: apenas I e III."}, {"id": 20, "tema": "Controle de Configuração", "question": "Um sistema foi corrigido, mas após uma nova entrega ao cliente erros que já haviam sido corrigidos voltaram a ocorrer. Qual disciplina de Engenharia de Software está diretamente relacionada ao problema descrito?", "options": ["Gestão de Configuração de Software", "Engenharia de Requisitos", "Modelagem de negócios", "Gerenciamento de riscos", "Prototipação"], "answer": 0, "explanation": "O Tema 6 aponta a Gestão de Configuração de Software, incluindo controle de versão, controle de mudança e auditoria das configurações."}];
+let current=0, score=0, answered=Array(questions.length).fill(false), selected=Array(questions.length).fill(null), results=Array(questions.length).fill(null);
+
+function render(){
+ const q=questions[current];
+ document.getElementById('counter').textContent=`Questão ${current+1} de ${questions.length}`;
+ document.getElementById('scoreTop').textContent=`Acertos: ${score}`;
+ document.getElementById('progress').style.width=`${(current/questions.length)*100}%`;
+ const quiz=document.getElementById('quiz');
+ quiz.innerHTML=`<div class="badge">${q.tema}</div>
+ <p class="question">${q.id}. ${formatQuestionText(q.question)}</p>
+ <div class="options">${q.options.map((o,i)=>`
+   <button class="option ${selected[current]===i?'selected':''}" onclick="selectOption(${i})" ${answered[current]?'disabled':''}>
+    <span class="letter">${String.fromCharCode(65+i)})</span><span>${o}</span>
+   </button>`).join('')}</div>
+ <div class="actions">
+   <button class="btn check" onclick="checkAnswer()" ${answered[current]?'disabled':''}>✓ Verificar resposta</button>
+   ${answered[current] && current<questions.length-1 ? '<button class="btn next" onclick="nextQuestion()">Próxima questão →</button>':''}
+   ${answered[current] && current===questions.length-1 ? '<button class="btn next" onclick="showResult()">🏁 Ver resultado</button>':''}
+ </div>
+ <div id="feedback" class="feedback"></div>`;
+ if(answered[current]) showFeedback();
+}
+
+function selectOption(i){
+ if(answered[current]) return;
+ selected[current]=i;
+ render();
+}
+function checkAnswer(){
+ if(selected[current]===null){alert('Selecione uma alternativa antes de verificar.');return;}
+ answered[current]=true;
+ const correct=selected[current]===questions[current].answer;
+ results[current]=correct;
+ if(correct) score++;
+ render();
+}
+function showFeedback(){
+ const fb=document.getElementById('feedback');
+ const q=questions[current], correct=results[current];
+ document.querySelectorAll('.option').forEach((el,i)=>{
+   if(i===q.answer) el.classList.add('correct');
+   if(i===selected[current] && !correct) el.classList.add('wrong');
+ });
+ fb.className='feedback '+(correct?'ok':'bad');
+ fb.innerHTML=`<strong>${correct?'✓ Correto!':'✗ Incorreto.'}</strong> ${q.explanation}<br><span class="small">Resposta correta: ${String.fromCharCode(65+q.answer)}) ${q.options[q.answer]}<br><br>💡 Explicação: Explicação detalhada: ${q.explanation}</span>`;
+}
+function nextQuestion(){if(current<questions.length-1){current++;render();window.scrollTo({top:0,behavior:'smooth'});}}
+function showResult(){
+ document.getElementById('progress').style.width='100%';
+ document.getElementById('quiz').classList.add('hidden');
+ const r=document.getElementById('result');r.classList.remove('hidden');
+ const pct=Math.round(score/questions.length*100), nota=(score/questions.length*10).toFixed(1);
+ let msg=pct>=90?'Excelente desempenho!':pct>=70?'Bom desempenho.':pct>=50?'Desempenho intermediário.':'Você precisa revisar alguns conteúdos.';
+ const temas={};questions.forEach((q,i)=>{if(!temas[q.tema])temas[q.tema]={a:0,t:0};temas[q.tema].t++;if(results[i])temas[q.tema].a++;});
+ r.innerHTML=`<h2>📊 Resultado final</h2><div class="score">${nota}/10</div><div>${score} de ${questions.length} questões corretas — ${pct}%</div>
+ <p><strong>${msg}</strong></p>
+ <div class="stats"><div class="stat"><strong>${score}</strong>Acertos</div><div class="stat"><strong>${questions.length-score}</strong>Erros</div><div class="stat"><strong>${pct}%</strong>Aproveitamento</div></div>
+ <div class="review"><h3>Desempenho por assunto</h3>${Object.entries(temas).map(([t,v])=>`<div class="review-item"><strong>${t}</strong><br>${v.a}/${v.t} — ${Math.round(v.a/v.t*100)}%</div>`).join('')}</div>
+ <div class="actions" style="justify-content:center"><button class="btn next" onclick="restart()">🔄 Refazer simulado</button>
+<button class="btn check" onclick="showGabarito()">📋 Ver gabarito completo</button></div>`;
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+function showGabarito(){
+ const r=document.getElementById('result');
+ r.innerHTML += `<div class="review"><h3>📋 Gabarito completo</h3>${
+ questions.map((q,i)=>`<div class="review-item">
+ <strong>${i+1}. ${String.fromCharCode(65+q.answer)}) ${q.options[q.answer]}</strong><br>
+ <span class="small">${q.explanation}</span>
+ </div>`).join('')
+ }</div>`;
+ window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
+
+function restart(){current=0;score=0;answered.fill(false);selected.fill(null);results.fill(null);document.getElementById('result').classList.add('hidden');document.getElementById('quiz').classList.remove('hidden');render();window.scrollTo({top:0,behavior:'smooth'});}
+render();
+</script>
+</body>
+</html>
